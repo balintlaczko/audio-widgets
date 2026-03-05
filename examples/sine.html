@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <style>body { font-family: monospace; padding: 10px; margin: 0; background: #f8f9fa; }</style>
+</head>
+<body>
+    <button id="btn">Start Sine Oscillator</button>
+    <br><br>
+    <label>Frequency: <span id="val">440</span> Hz</label><br>
+    <input type="range" id="slider" min="100" max="1000" value="440" style="width: 100%;">
+    <script>
+        let synth;
+        const btn = document.getElementById('btn');
+        const slider = document.getElementById('slider');
+        const val = document.getElementById('val');
+
+        btn.addEventListener('click', async () => {
+            await Tone.start();
+            if (!synth) {
+                synth = new Tone.Oscillator(440, "sine").toDestination().start();
+                btn.textContent = "Running";
+                btn.disabled = true;
+            }
+        });
+
+        slider.addEventListener('input', (e) => {
+            const f = parseFloat(e.target.value);
+            val.textContent = f;
+            if (synth) synth.frequency.rampTo(f, 0.1);
+        });
+    </script>
+</body>
+</html>
